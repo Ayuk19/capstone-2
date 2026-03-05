@@ -26,10 +26,16 @@ jobs:
           docker login --username AWS --password-stdin 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo
 
       - name: Build Docker image
-        run: docker build -t my-node-app .
+      run: docker build -t my-node-app .
 
-      - name: Tag Docker image
-        run: docker tag my-node-app:latest 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:latest
+- name: Tag Docker images
+  run: |
+    docker tag my-node-app:latest 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:dev
+    docker tag my-node-app:latest 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:staging
+    docker tag my-node-app:latest 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:prod
 
-      - name: Push Docker image
-        run: docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:latest
+- name: Push Docker images
+  run: |
+    docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:dev
+    docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:staging
+    docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:prod
