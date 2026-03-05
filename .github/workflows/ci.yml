@@ -22,7 +22,7 @@ jobs:
 
       - name: Login to Amazon ECR
         run: |
-          aws ecr get-login-password --region $AWS_REGION | 
+          aws ecr get-login-password --region $AWS_REGION |
           docker login --username AWS --password-stdin 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo
 
       - name: Build Docker image
