@@ -32,4 +32,4 @@ jobs:
         run: docker tag my-node-app:latest <YOUR_ECR_URI>:latest
 
       - name: Push Docker image
-        run: docker push 021658586201.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:latest
+        run: docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:latest
