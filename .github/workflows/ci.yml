@@ -18,13 +18,14 @@ jobs:
           aws-region: us-east-1
 
       - name: Login to ECR
-        run: |
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 209561932650.dkr.ecr.us-east-1.amazonaws.com
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 209561932650.dkr.ecr.us-east-1.amazonaws.com
 
       - name: Build and push environment-specific images
         run: |
-          for env in dev staging prod; do
-            echo "Building image for $env environment..."
-            docker build --build-arg ENV=$env -t 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:$env .
-            docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:$env
+          REPO=209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo
+          for ENV in dev staging prod; do
+            IMAGE_TAG=$REPO:$ENV
+            echo "Building and pushing image $IMAGE_TAG"
+            docker build --build-arg ENV=$ENV -t $IMAGE_TAG .
+            docker push $IMAGE_TAG
           done
