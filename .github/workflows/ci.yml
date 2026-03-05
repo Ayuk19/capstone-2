@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,16 +17,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 209561932650.dkr.ecr.us-east-1.amazonaws.com
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 209561932650.dkr.ecr.us-east-1.amazonaws.com
 
-      - run: docker build -t my-node-app .
-
-      - run: |
-          docker tag my-node-app:latest 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:dev
-          docker tag my-node-app:latest 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:staging
-          docker tag my-node-app:latest 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:prod
-
-      - run: |
-          docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:dev
-          docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:staging
-          docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:prod
+      - name: Build and push environment-specific images
+        run: |
+          for env in dev staging prod; do
+            echo "Building image for $env environment..."
+            docker build --build-arg ENV=$env -t 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:$env .
+            docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:$env
+          done
