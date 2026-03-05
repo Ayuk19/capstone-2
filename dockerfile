@@ -1,5 +1,7 @@
-
 FROM node:18
+
+ARG ENV
+ENV NODE_ENV=$ENV
 
 WORKDIR /app
 
