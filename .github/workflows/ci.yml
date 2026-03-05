@@ -22,14 +22,14 @@ jobs:
 
       - name: Login to Amazon ECR
         run: |
-          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo
-          
-           - name: Build Docker image
-       
-         run: docker build -t my-node-app .
+          aws ecr get-login-password --region $AWS_REGION | 
+          docker login --username AWS --password-stdin 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo
+
+      - name: Build Docker image
+        run: docker build -t my-node-app .
 
       - name: Tag Docker image
-        run: docker tag my-node-app:latest <YOUR_ECR_URI>:latest
+        run: docker tag my-node-app:latest 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo :latest
 
       - name: Push Docker image
         run: docker push 209561932650.dkr.ecr.us-east-1.amazonaws.com/actions/ayuk-repo:latest
